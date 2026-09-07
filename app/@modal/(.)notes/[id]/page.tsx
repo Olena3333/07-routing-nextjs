@@ -10,10 +10,11 @@ interface ModalNotePageProps {
 
 export default async function ModalNotePage({ params }: ModalNotePageProps) {
     const { id } = await params;
+
     const queryClient = new QueryClient();
 
     try {
-        await queryClient.fetchQuery({
+        await queryClient.prefetchQuery({
             queryKey: ['note', id],
             queryFn: () => fetchNoteById(id),
         });
@@ -21,6 +22,7 @@ export default async function ModalNotePage({ params }: ModalNotePageProps) {
         if (axios.isAxiosError(error) && error.response?.status === 404) {
             notFound();
         }
+
         throw error;
     }
 
